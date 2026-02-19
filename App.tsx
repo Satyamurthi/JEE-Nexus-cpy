@@ -1,3 +1,5 @@
+
+// Fix: Explicitly extending React.Component and adding constructor to fix setState/props type errors.
 import React, { Component, useState, useEffect, Suspense, ReactNode } from 'react';
 import { HashRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
 // Fixed: Removed 'Layout' as it is not a valid export from lucide-react
@@ -27,8 +29,11 @@ interface ErrorBoundaryState {
   errorType?: 'network' | 'logic';
 }
 
-class NetworkErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { hasError: false };
+class NetworkErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(error: any): ErrorBoundaryState {
     const isNetwork = error.message?.includes('network') || error.name === 'ChunkLoadError';
